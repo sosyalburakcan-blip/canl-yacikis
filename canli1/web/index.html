@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Polymarket BTC 5m Bot</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Polymarket Only</p>
+          <h1>BTC Up or Down 5 Dakika Botu</h1>
+          <p class="subcopy">
+            Tek market, tek sinyal akışı, tek pozisyon mantığı. Bot aktif BTC 5 dakikalık slotu bulur, BTC momentumunu fiyatlarla
+            karşılaştırır ve yeterli edge varsa işlem açar.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button id="startBtn" class="primary">Başlat</button>
+          <button id="stopBtn">Durdur</button>
+          <button id="runOnceBtn">1 Cycle</button>
+          <button id="resetBalanceBtn">Paper Reset</button>
+          <button id="resetPnlBtn">PnL Reset</button>
+          <button id="resetBtn" class="danger">State Reset</button>
+          <button id="shutdownBtn" class="danger">Yazılımı Kapat</button>
+        </div>
+      </header>
+
+      <section class="status-strip">
+        <div class="status-pill"><span>Durum</span><strong id="statusText">-</strong></div>
+        <div class="status-pill"><span>Efektif Mod</span><strong id="modeText">-</strong></div>
+        <div class="status-pill"><span>Hedef Mod</span><strong id="targetModeText">-</strong></div>
+        <div class="status-pill"><span>Grace</span><strong id="graceText">-</strong></div>
+        <div class="status-pill"><span>Cycle</span><strong id="cycleText">-</strong></div>
+        <div class="status-pill"><span>Slot</span><strong id="slotText">-</strong></div>
+        <div class="status-pill"><span>Aktif İşlem</span><strong id="tradeStatusText">-</strong></div>
+        <div class="status-pill"><span>Geoblock</span><strong id="geoText">-</strong></div>
+      </section>
+
+      <section class="cards">
+        <article class="card metric">
+          <span>Equity</span>
+          <strong id="equityText">-</strong>
+          <small id="realizedText">-</small>
+        </article>
+        <article class="card metric">
+          <span>Sinyal</span>
+          <strong id="signalText">-</strong>
+          <small id="signalMetaText">-</small>
+        </article>
+        <article class="card metric">
+          <span>Market</span>
+          <strong id="marketPriceText">-</strong>
+          <small id="marketMetaText">-</small>
+        </article>
+        <article class="card metric">
+          <span>Performans</span>
+          <strong id="winRateText">-</strong>
+          <small id="stateFileText">-</small>
+        </article>
+      </section>
+
+      <section class="grid main-grid">
+        <article class="card">
+          <div class="section-head">
+            <h2>Aktif Trade</h2>
+            <span id="activeTradeBadge">Yok</span>
+          </div>
+          <div id="activeTradeBox" class="detail-grid empty-box">Açık trade yok.</div>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <h2>Market ve Sinyal</h2>
+            <span id="signalReasonText">-</span>
+          </div>
+          <div id="signalBox" class="detail-grid empty-box">Sinyal bekleniyor.</div>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <h2>En İyi Cycle</h2>
+            <span id="bestCycleBadge">-</span>
+          </div>
+          <div id="bestCycleBox" class="detail-grid empty-box">Henüz yeterli trade verisi yok.</div>
+        </article>
+
+        <article class="card wide">
+          <div class="section-head">
+            <h2>Son Trade'ler</h2>
+            <span>Son 20 kayıt</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Slot</th>
+                  <th>Yön</th>
+                  <th>Durum</th>
+                  <th>Entry</th>
+                  <th>Exit</th>
+                  <th>PnL</th>
+                  <th>Neden</th>
+                </tr>
+              </thead>
+              <tbody id="closedTradesBody"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <h2>Bot Ayarları</h2>
+            <span id="configStatusText">Live hedefi açıksa önce paper grace çalışır</span>
+          </div>
+          <form id="configForm" class="config-grid">
+            <label><span>Target Mode</span><select name="trading_mode"><option value="paper">paper</option><option value="live">live</option></select></label>
+            <label><span>Paper Grace Min</span><input name="paper_grace_minutes" type="number" min="0" max="1440"></label>
+            <label><span>Poll Seconds</span><input name="poll_seconds" type="number" min="5" max="60"></label>
+            <label><span>Lookback Min</span><input name="signal_lookback_minutes" type="number" min="20" max="120"></label>
+            <label><span>Paper Balance</span><input name="paper_balance_usdc" type="number" step="0.1" min="25"></label>
+            <label>
+              <span>Paper Requires Shadow</span>
+              <select name="paper_require_live_shadow">
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+            </label>
+            <label><span>Order Size</span><input name="order_size_usdc" type="number" step="0.1" min="5"></label>
+            <label><span>High Conf Thresh</span><input name="high_confidence_threshold" type="number" step="0.1" min="50" max="99"></label>
+            <label><span>High Conf Size</span><input name="high_confidence_order_size_usdc" type="number" step="0.1" min="5"></label>
+            <label><span>Min Confidence</span><input name="min_confidence" type="number" step="0.1" min="50" max="99"></label>
+            <label><span>Min Edge</span><input name="min_edge" type="number" step="0.001" min="0"></label>
+            <label><span>Max Entry Price</span><input name="max_entry_price" type="number" step="0.01" min="0.05" max="0.95"></label>
+            <label><span>Min Entry Sn</span><input name="min_entry_seconds" type="number" min="0" max="260"></label>
+            <label><span>Max Entry Sn</span><input name="max_entry_seconds" type="number" min="5"></label>
+            <label><span>Min Time Left</span><input name="min_seconds_left_to_trade" type="number" min="5"></label>
+            <label><span>Take Profit Delta</span><input name="take_profit_delta" type="number" step="0.01" min="0.01"></label>
+            <label><span>Stop Loss Delta</span><input name="stop_loss_delta" type="number" step="0.01" min="0.01"></label>
+            <label><span>Order Buffer</span><input name="market_order_buffer" type="number" step="0.01" min="0"></label>
+            <label><span>Paper Fee Rate</span><input name="paper_taker_fee_rate" type="number" step="0.001" min="0"></label>
+            <label><span>Live Entry Buffer</span><input name="live_entry_price_buffer" type="number" step="0.01" min="0" max="0.2"></label>
+            <label><span>Book Depth x</span><input name="live_orderbook_depth_multiplier" type="number" step="0.05" min="1" max="10"></label>
+            <label><span>Book Max Age</span><input name="live_orderbook_max_age_seconds" type="number" step="0.5" min="0.5" max="10"></label>
+            <label><span>Binance WS Max Age</span><input name="binance_ws_max_age_seconds" type="number" step="0.5" min="1" max="60"></label>
+            <label><span>Poly WS Max Age</span><input name="polymarket_ws_max_age_seconds" type="number" step="0.5" min="1" max="60"></label>
+            <label>
+              <span>Live Reprice</span>
+              <select name="live_reprice_before_order">
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+            </label>
+            <label>
+              <span>Telegram Trade Alerts</span>
+              <select name="telegram_trade_notifications">
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+            </label>
+            <label>
+              <span>Telegram Shadow Reports</span>
+              <select name="telegram_shadow_market_reports">
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+            </label>
+            <button type="submit" class="primary full">Ayarları Kaydet</button>
+          </form>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <h2>Secrets ve Test</h2>
+            <span id="secretStatusText">Polymarket private key sadece live mod için gerekir</span>
+          </div>
+          <form id="secretsForm" class="config-grid">
+            <label><span>Telegram Bot Token</span><input id="telegramBotToken" name="telegram_bot_token" type="password" autocomplete="off"></label>
+            <label><span>Telegram Chat ID</span><input id="telegramChatId" name="telegram_chat_id" type="password" autocomplete="off"></label>
+            <label><span>Telegram API Base</span><input id="telegramApiBaseUrl" name="telegram_api_base_url" type="text" autocomplete="off"></label>
+            <label><span>Polymarket Private Key</span><input id="polyPrivateKey" name="polymarket_private_key" type="password" autocomplete="off"></label>
+            <label><span>Funder Address</span><input id="polyFunderAddress" name="polymarket_funder_address" type="text" autocomplete="off"></label>
+            <label><span>Signature Type</span><input id="polySignatureType" name="polymarket_signature_type" type="number" min="0" max="2"></label>
+            <div class="secret-hint" id="secretHints">
+              <div>Telegram: <strong id="telegramSecretHint">-</strong></div>
+              <div>Polymarket: <strong id="polySecretHint">-</strong></div>
+            </div>
+            <div class="button-row full">
+              <button type="submit" class="primary">Secrets Kaydet</button>
+              <button type="button" id="testTelegramBtn">Telegram Test</button>
+              <button type="button" id="testPolymarketBtn">Polymarket Test</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="card wide">
+          <div class="section-head">
+            <h2>Loglar</h2>
+            <span>Son 60 kayıt</span>
+          </div>
+          <div id="logsBox" class="logs-box"></div>
+        </article>
+      </section>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>

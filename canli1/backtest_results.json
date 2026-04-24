@@ -1,0 +1,98 @@
+{
+  "total_slots": 2160,
+  "up_pct": 51.76,
+  "down_pct": 48.24,
+  "strategies": [
+    {
+      "name": "Baseline (hep UP)",
+      "trades": 2160,
+      "wins": 1118,
+      "win_rate": 51.76,
+      "skipped": 0
+    },
+    {
+      "name": "A: 1dk momentum (>0 → UP)",
+      "trades": 2160,
+      "wins": 1546,
+      "win_rate": 71.57,
+      "skipped": 0
+    },
+    {
+      "name": "B: 1dk momentum filtreli (|ret|>0.03%)",
+      "trades": 1495,
+      "wins": 1154,
+      "win_rate": 77.19,
+      "skipped": 665
+    },
+    {
+      "name": "C: 2dk momentum (>0 → UP)",
+      "trades": 2160,
+      "wins": 1678,
+      "win_rate": 77.69,
+      "skipped": 0
+    },
+    {
+      "name": "D: Slot öncesi 1dk momentum",
+      "trades": 2160,
+      "wins": 1044,
+      "win_rate": 48.33,
+      "skipped": 0
+    },
+    {
+      "name": "E: Slot öncesi 5dk momentum",
+      "trades": 2160,
+      "wins": 1043,
+      "win_rate": 48.29,
+      "skipped": 0
+    },
+    {
+      "name": "F: OFI >0 → UP",
+      "trades": 2160,
+      "wins": 1351,
+      "win_rate": 62.55,
+      "skipped": 0
+    },
+    {
+      "name": "G: OFI filtreli (|ofi|>0.15)",
+      "trades": 1514,
+      "wins": 1006,
+      "win_rate": 66.45,
+      "skipped": 646
+    },
+    {
+      "name": "H: 15dk trend devamı",
+      "trades": 2160,
+      "wins": 1002,
+      "win_rate": 46.39,
+      "skipped": 0
+    },
+    {
+      "name": "I: Kontrarian 1dk (tersi)",
+      "trades": 2160,
+      "wins": 614,
+      "win_rate": 28.43,
+      "skipped": 0
+    },
+    {
+      "name": "J: Kombine OFI+pre1m aynı yön",
+      "trades": 28,
+      "wins": 21,
+      "win_rate": 75.0,
+      "skipped": 2132
+    },
+    {
+      "name": "K: Düşük vol + 2dk momentum",
+      "trades": 1131,
+      "wins": 852,
+      "win_rate": 75.33,
+      "skipped": 1029
+    },
+    {
+      "name": "L: Yüksek vol + kontrarian 1dk",
+      "trades": 486,
+      "wins": 117,
+      "win_rate": 24.07,
+      "skipped": 1674
+    }
+  ]
+}

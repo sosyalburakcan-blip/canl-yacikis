@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"from spotbot.engine import BotRuntime; from spotbot.models import BotConfig; print\\('OK'\\); print\\('weak_conf:', BotConfig\\(\\).weak_signal_confidence_threshold\\); print\\('weak_wait:', BotConfig\\(\\).weak_signal_wait_seconds\\)\")",
+      "Bash(python -c \"from spotbot.polymarket import SignalEngine; print\\('OK'\\)\")",
+      "Bash(python -c \"from spotbot.models import BotConfig; c = BotConfig\\(\\); print\\('fee:', c.paper_taker_fee_rate\\); from spotbot.polymarket import SignalEngine; print\\('SignalEngine OK'\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"from spotbot.models import BotConfig; c = BotConfig\\(\\); print\\(f'order_size_usdc: \\\\${c.order_size_usdc}'\\); print\\(f'live_max_daily_loss: \\\\${c.live_max_daily_loss_usdc}'\\)\")",
+      "Bash(python -c \"from spotbot.models import BotConfig; c = BotConfig\\(\\); print\\(f'order_size_usdc: \\\\${c.order_size_usdc}'\\); print\\(f'live_max_daily_loss: \\\\${c.live_max_daily_loss_usdc}'\\); print\\(f'live_max_consecutive_losses: {c.live_max_consecutive_losses}'\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('spotbot/models.py', encoding='utf-8'\\).read\\(\\)\\); ast.parse\\(open\\('spotbot/engine.py', encoding='utf-8'\\).read\\(\\)\\); ast.parse\\(open\\('spotbot/polymarket.py', encoding='utf-8'\\).read\\(\\)\\); print\\('AST OK'\\)\")",
+      "Bash(python -c \"from spotbot.models import BotConfig; from spotbot.engine import BotRuntime; cfg = BotConfig\\(\\); print\\('live_emergency_exit_bid =', cfg.live_emergency_exit_bid\\); print\\('weak_signal_confidence_threshold =', cfg.weak_signal_confidence_threshold\\); print\\('weak_signal_wait_seconds =', cfg.weak_signal_wait_seconds\\); print\\('order_size_usdc =', cfg.order_size_usdc\\); print\\('live_max_daily_loss_usdc =', cfg.live_max_daily_loss_usdc\\); print\\('trading_mode =', cfg.trading_mode\\); print\\('paper_grace_minutes =', cfg.paper_grace_minutes\\); print\\(\\); import inspect; sig = inspect.signature\\(BotRuntime._resolve_outcome_from_market\\); print\\('_resolve_outcome_from_market signature:', sig\\); print\\('OK'\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('spotbot/engine.py', encoding='utf-8'\\).read\\(\\)\\); ast.parse\\(open\\('spotbot/models.py', encoding='utf-8'\\).read\\(\\)\\); print\\('AST OK'\\)\")",
+      "Bash(python -c \"import sys; sys.stdout.reconfigure\\(encoding='utf-8'\\); from spotbot.engine import BotRuntime; from spotbot.models import BotConfig; cfg = BotConfig\\(\\); print\\('IMPORT OK'\\); print\\('hold_until_resolution:', cfg.hold_until_resolution\\); print\\('live_emergency_exit_bid:', cfg.live_emergency_exit_bid\\); print\\('take_profit_delta:', cfg.take_profit_delta\\); print\\('stop_loss_delta:', cfg.stop_loss_delta\\); print\\('min_confidence:', cfg.min_confidence\\); print\\('min_edge:', cfg.min_edge\\)\")",
+      "Bash(python -c \"import sys; sys.stdout.reconfigure\\(encoding='utf-8'\\); from spotbot.models import BotConfig; cfg = BotConfig\\(\\); removed = ['peak_strength_tolerance_pct','weak_signal_confidence_threshold','weak_signal_wait_seconds','adaptive_cycle_filter','adaptive_cycle_min_samples','adaptive_cycle_min_bucket_samples','early_adverse_exit_seconds','early_adverse_exit_min_delta','early_adverse_exit_hard_delta','paper_live_realism']; [print\\('STILL PRESENT:', a\\) for a in removed if hasattr\\(cfg, a\\)]; print\\('All removed fields are gone' if not any\\(hasattr\\(cfg, a\\) for a in removed\\) else 'FAIL'\\)\")",
+      "Bash(grep -n \"except.*pass\\\\|except:\\\\s*$\\\\|except Exception.*pass\" C:/Users/Burakcan/Desktop/yedekpolycoin/spotbot/ws_feeds.py)",
+      "Bash(python -c \"from spotbot.ws_feeds import BinanceWsFeeder, PolymarketWsFeeder; b=BinanceWsFeeder\\(\\); p=PolymarketWsFeeder\\(\\); print\\('stop methods:', hasattr\\(b,'stop'\\), hasattr\\(p,'stop'\\)\\)\")",
+      "Bash(python -c \"from spotbot import engine; print\\('engine import OK'\\)\")",
+      "Bash(python -c \" import json with open\\('C:/Users/Burakcan/Desktop/yedekpolycoin/runtime/polymarket_btc_5m_state.json', encoding='utf-8'\\) as f: state = json.load\\(f\\) sig = state.get\\('last_signal', {}\\) print\\('=== LAST SIGNAL ==='\\) print\\(json.dumps\\(sig, indent=2, default=str\\)\\) \")",
+      "Bash(python backtest.py)",
+      "Bash(curl -s http://127.0.0.1:8765/api/state)",
+      "Bash(curl -s -X POST http://127.0.0.1:8765/api/config -H \"Content-Type: application/json\" -d '{\"max_entry_seconds\":150,\"min_entry_price\":0.42,\"min_confidence\":65.0}')",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d, indent=2, ensure_ascii=False\\)[:800]\\)\")",
+      "Bash(curl -s -X POST http://127.0.0.1:8765/api/config -H \"Content-Type: application/json\" -d '{\"signal_min_intraslot_move_pct\":0.06,\"signal_strong_intraslot_move_pct\":0.10}')",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); c=d.get\\('config',{}\\); print\\('ok:',d.get\\('ok'\\)\\); print\\('min_intraslot:',c.get\\('signal_min_intraslot_move_pct'\\)\\); print\\('strong_intraslot:',c.get\\('signal_strong_intraslot_move_pct'\\)\\)\")"
+    ]
+  }
+}

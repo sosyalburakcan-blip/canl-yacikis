@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "C:\Users\Burakcan\Desktop\yedekpolycoin\app.py", line 52, in acquire_instance_lock
+    fd = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+FileExistsError: [Errno 17] File exists: 'C:\\Users\\Burakcan\\Desktop\\yedekpolycoin\\runtime\\polymarket_btc_5m_state.json.lock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Burakcan\Desktop\yedekpolycoin\app.py", line 141, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\Users\Burakcan\Desktop\yedekpolycoin\app.py", line 107, in main
+    lock_path = acquire_instance_lock(config.state_file)
+  File "C:\Users\Burakcan\Desktop\yedekpolycoin\app.py", line 61, in acquire_instance_lock
+    raise RuntimeError(
+        f"Ayni state dosyasi zaten baska bir bot tarafindan kullaniliyor: pid={existing_pid}, lock={lock_path}"
+    )
+RuntimeError: Ayni state dosyasi zaten baska bir bot tarafindan kullaniliyor: pid=1556, lock=C:\Users\Burakcan\Desktop\yedekpolycoin\runtime\polymarket_btc_5m_state.json.lock
